@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "Layer",
+  "sourceName": "contracts/Layer.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea264697066735822122095ae71d7660f6ed97311f39206cd81baf5e23fccc1b5c5c04f116c3f1de14a6964736f6c63430008110033",
+  "deployedBytecode": "0x6080604052600080fdfea264697066735822122095ae71d7660f6ed97311f39206cd81baf5e23fccc1b5c5c04f116c3f1de14a6964736f6c63430008110033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
