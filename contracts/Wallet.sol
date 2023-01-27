@@ -4,6 +4,8 @@ pragma solidity ^0.8.7;
 
 import "./interfaces/IToken.sol";
 
+import "./Layer.sol";
+
 contract Wallet {
   address tokenAddr;
 
@@ -60,7 +62,7 @@ contract Wallet {
   function startTransfer(address receiver, uint256 amount) external {
     _startTransfer(receiver, amount);
   }
-
+  
   function startTransferFrom(address sender, address receiver, uint256 amount) external {
     _startTransfer(receiver, amount);
   }
@@ -68,30 +70,43 @@ contract Wallet {
   function _startTransfer(address receiver, uint256 amount) private {
     emit StartTransfer(receiver, amount);
 
-    Transfer transfer = {
+    Transfer memory transfer = Transfer({
       transferNum: lastTransferNum + 1,
       receiver: receiver,
       amount: amount,
       layers: transferRequirements,
       executed: false
-    }
+    });
 
     transfers.push(transfer);
 
     executeLayers(transfer);
   }
 
-  /**
-    * Temporary.
-    */
+  event LogLayer(uint layerNum, string layerType, bool started, bool success, bool failure);
+
   function initTransferRequirements() public virtual {
-    // seperate contract
-    // 
-    Layer a = ()
-    Layer b = ()
+    Layer a = new Layer();
+    a.setLayerType("email");
+
+    Layer b = new Layer();
+    b.setLayerType("sms");
+
+    Layer c = new Layer();
+    c.setLayerType("transaction");
 
     transferRequirements.push(a);
     transferRequirements.push(b);
+    transferRequirements.push(c);
+
+    for (uint i = 0; i < transferRequirements.length; i++) {
+      Layer layer = transferRequirements[i];
+      string memory layerType = layer.layerType();
+      bool started = layer.started();
+      bool success = layer.success();
+      bool failure = layer.failure();
+      emit LogLayer(i, layerType, started, success, failure);
+    }
   }
 
   function addLayer() private {
@@ -106,15 +121,15 @@ contract Wallet {
     //
   }
 
-  function executeLayers(Transfer _transfer) private {
+  function executeLayers(Transfer memory _transfer) private {
     for (uint i = 0; i < _transfer.layers.length; i++) {
       Layer layer = _transfer.layers[i];
-
-      layer.start();
+      
+      layer.executeStarted();
     }
   }
 
-  function executeTransfer() {
+  function executeTransfer() private {
     //
   }
 }

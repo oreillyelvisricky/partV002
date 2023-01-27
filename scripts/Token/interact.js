@@ -26,7 +26,11 @@ async function main() {
   console.log(proxyAddress)
   */
 
-  // await contract.simulateTransfer()
+  /*
+  await contract.simulateTransfer()
+  */
+
+  await initTransferRequirements();
 }
 
 main().catch(error => {

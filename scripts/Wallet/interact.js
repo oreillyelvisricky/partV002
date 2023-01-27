@@ -14,8 +14,6 @@ const Contract = require(CONTRACT_ARTIFACT_PATH)
 const contract = new ethers.Contract(CONTRACT_ADDRESS, Contract.abi, signer)
 
 async function main() {
-  await contract.initTransferRequirements();
-
   /*
   await contract.setTokenAddress(TOKEN_CONTRACT_ADDRESS)
 
@@ -23,6 +21,9 @@ async function main() {
 
   await contract.startTransfer(fakeAddr, 1)
   */
+
+  console.log(">>> initTransferRequirements")
+  await contract.initTransferRequirements();
 }
 
 main().catch(error => {
@@ -37,19 +38,17 @@ contract.on("Receive", (sender, amount, balance) => {
   console.log("balance:", balance)
 })
 
-contract.on("MintSmartTokensForTokens", () => {
-  console.log("EVENT Wallet: MintSmartTokensForTokens")
-})
-
 contract.on("StartTransfer", (receiver, amount) => {
   console.log("EVENT Wallet: StartTransfer")
   console.log("receiver:", receiver)
   console.log("amount:", amount)
 })
 
-contract.on("StartTransferFrom", (sender, receiver, amount) => {
-  console.log("EVENT Wallet: StartTransferFrom")
-  console.log("sender:", sender)
-  console.log("receiver:", receiver)
-  console.log("amount:", amount)
+contract.on("LogLayer", (layerNum, layerType, started, success, failure) => {
+  console.log("EVENT Wallet: LogLayer")
+  console.log("layerNum:", layerNum)
+  console.log("layerType:", layerType);
+  console.log("started:", started)
+  console.log("success:", success)
+  console.log("failure:", failure)
 })

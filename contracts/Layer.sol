@@ -3,23 +3,34 @@
 pragma solidity ^0.8.7;
 
 contract Layer {
-  event StartedEv();
-  event SuccessEv();
-  event FailureEv()
+  string public layerType;
 
   bool public started;
   bool public success;
   bool public failure;
 
-  function started() private {
-    emit StartedEv();
+  constructor() {
   }
 
-  function success() private {
-    emit SuccessEv();
+  function setLayerType(string memory _layerType) public virtual {
+    layerType = _layerType;
   }
 
-  function failure() private {
-    emit FailureEv();
+  function executeStarted() public virtual {
+    started = true;
+    success = false;
+    failure = false;
+  }
+
+  function executeSuccess() public virtual {
+    started = false;
+    success = true;
+    failure = false;
+  }
+
+  function executeFailure() public virtual {
+    started = false;
+    success = false;
+    failure = true;
   }
 }
